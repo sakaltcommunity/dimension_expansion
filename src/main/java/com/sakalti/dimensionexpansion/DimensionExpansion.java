@@ -21,7 +21,8 @@ public class DimensionExpansion {
         // アイテムとエンティティの登録
         ModItems.registerItems(modEventBus);
         ModEntities.registerEntities(modEventBus);
-        ModSpawnEggs.registerDimensions(modEventBus);
+        ModSpawnEggs.registerItems(modEventBus);
+        ModDimensions.registerDimensions(modEventBus);
         
 
         modEventBus.addListener(this::setup);
