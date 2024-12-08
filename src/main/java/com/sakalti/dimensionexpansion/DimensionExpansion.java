@@ -3,6 +3,7 @@ package com.sakalti.dimensionexpansion;
 import com.sakalti.dimensionexpansion.init.ModEntities;
 import com.sakalti.dimensionexpansion.init.ModItems;
 import com.sakalti.dimensionexpansion.init.ModDimensions;
+import com.sakalti.dimensionexpansion.init.ModSpawnEggs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -20,7 +21,8 @@ public class DimensionExpansion {
         // アイテムとエンティティの登録
         ModItems.registerItems(modEventBus);
         ModEntities.registerEntities(modEventBus);
-        ModDimensions.registerDimensions(modEventBus);
+        ModSpawnEggs.registerDimensions(modEventBus);
+        
 
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::doClientStuff);
