@@ -5,14 +5,23 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.World;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.boss.BossBar;
+import net.minecraft.world.boss.BossBarColor;
+import net.minecraft.world.boss.BossBarOverlay;
 
 public class AncientSpider extends SpiderEntity {
+    private BossBar bossBar;
+
     public AncientSpider(EntityType<? extends SpiderEntity> entityType, World world) {
         super(entityType, world);
         this.setSize(3.0F, 1.0F); // サイズ変更
+        this.bossBar = new BossBar(new TextComponent("Ancient Spider"), BossBarColor.PURPLE, BossBarOverlay.PROGRESS);
+        this.bossBar.setSyncToClients(true); // クライアントと同期
     }
 
     @Override
@@ -31,8 +40,38 @@ public class AncientSpider extends SpiderEntity {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        // ボスバーの更新処理
+        if (!this.level.isClientSide) {
+            this.bossBar.setProgress(this.getHealth() / this.getMaxHealth());
+            this.bossBar.setVisible(true); // ボスバーを表示
+        }
+    }
+
+    @Override
     protected void dropSpecialItems() {
         super.dropSpecialItems();
         this.entityDropItem(ModItems.ANCIENT_STAFF.getDefaultInstance()); // ドロップアイテム
+    }
+
+    // プレイヤーが近くにいる時にボスバーを表示
+    @Override
+    public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag pTag) {
+        super.addAdditionalSaveData(pTag);
+        // ここにボスバーの状態を保存する処理を追加することができます
+    }
+
+    // ボスバーの状態を表示するメソッド
+    public void setBossBarToPlayer(PlayerEntity player) {
+        if (!this.level.isClientSide) {
+            this.bossBar.addPlayer(player);
+        }
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
+        this.bossBar.removeAll(); // エンティティが削除される際にボスバーを削除
     }
 }
