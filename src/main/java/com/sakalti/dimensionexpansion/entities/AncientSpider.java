@@ -7,6 +7,7 @@ import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 
 public class AncientSpider extends SpiderEntity {
     public AncientSpider(EntityType<? extends SpiderEntity> entityType, World world) {
@@ -22,12 +23,11 @@ public class AncientSpider extends SpiderEntity {
         this.goalSelector.addGoal(3, new FollowPlayerGoal(this, 1.0D)); // プレイヤー追跡AI
     }
 
-    @Override
-    protected void registerAttributes() {
-        super.registerAttributes();
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(250.0D); // HP
-        this.getAttribute(Attributes.ARMOR).setBaseValue(4.0D); // 防御力
-        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8.0D); // 攻撃力
+    public static AttributeSupplier.Builder createAttributes() {
+        return SpiderEntity.createAttributes()
+            .add(Attributes.MAX_HEALTH, 250.0D) // HP
+            .add(Attributes.ARMOR, 4.0D) // 防御力
+            .add(Attributes.ATTACK_DAMAGE, 8.0D); // 攻撃力
     }
 
     @Override
